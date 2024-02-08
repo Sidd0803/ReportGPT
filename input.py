@@ -46,9 +46,10 @@ def extract_values(dictionary, searchterm):
     return result
 
 #can retrieve url/body using rapid api
-items = extract_values(res_dict, "body")
+items = extract_values(res_dict, "links")
 print(len(items), " items retrieved!")
-article = items[17]
+print(items)
+#article = items[]
 
 #try loading content separately using webLoader
 # loader = WebBaseLoader(links[9])
