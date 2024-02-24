@@ -11,6 +11,7 @@ chromadb = "*"
 tiktoken = "*"
 sentence-transformers = "*"
 streamlit = "*"
+gpt4all = "*"
 
 [dev-packages]
 
