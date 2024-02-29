@@ -7,7 +7,7 @@ import streamlit as st
 # set initial message
 if "messages" not in st.session_state.keys():
     st.session_state.messages = [
-        {"role": "assistant", "content": "Hello there, how can I help you"}
+        {"role": "assistant", "content": "Hello there, how can I help you?"}
     ]
 
 

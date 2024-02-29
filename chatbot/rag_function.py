@@ -1,35 +1,42 @@
-#from langchain.embeddings.sentence_transformer import SentenceTransformerEmbeddings
 from langchain_community.vectorstores import Chroma
 from langchain.prompts import PromptTemplate
-from langchain.chains import ConversationalRetrievalChain
-#from langchain_community.llms import GPT4All
+from langchain.retrievers.self_query.base import SelfQueryRetriever
 from langchain.chat_models import ChatOpenAI
 from langchain_community.embeddings.sentence_transformer import (
     SentenceTransformerEmbeddings,
 )
 from langchain.memory import ConversationBufferMemory
+from langchain.chains.query_constructor.base import AttributeInfo
+from langchain.chains import ConversationalRetrievalChain
 #from decouple import config
+
+#document info
+metadata_field_info = [
+    AttributeInfo(
+        name="source",
+        description="The news source that published the article.",
+        type="string",
+    ),
+    AttributeInfo(
+        name="time",
+        description="The Unix timestamp in milliseconds. Convert to date and time format to answer user queries.",
+        type="integer",
+    )]
+document_content_description = "A news article about some journalistic topic."
+
 
 print("llm, chroma, embedding function ...")
 # create chat model
-llm = ChatOpenAI(openai_api_key="KEY", temperature=0)
-#llm = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
-#model = GPT4All(model="./models/mistral-7b-openorca.Q4_0.gguf", n_threads=8)
+llm = ChatOpenAI(openai_api_key="OPEN AI KEY", temperature=0)
 
 embedding_function = SentenceTransformerEmbeddings(
     model_name="all-MiniLM-L6-v2"
 )
 
 vector_db = Chroma(
-    persist_directory="../myvecdb",
+    persist_directory="../vector_db",
     embedding_function=embedding_function,
 )
-
-# vector_db = Chroma(
-#     persist_directory="../vector_db",
-#     collection_name="rich_dad_poor_dad",
-#     embedding_function=embedding_function,
-# )
 
 print("prompt, memory, QA chain ...")
 # create prompt
@@ -46,7 +53,6 @@ Answer:""",
 memory = ConversationBufferMemory(
     return_messages=True, memory_key="chat_history")
 
-# create retriever chain
 qa_chain = ConversationalRetrievalChain.from_llm(
     llm=llm,
     memory=memory,
@@ -55,9 +61,16 @@ qa_chain = ConversationalRetrievalChain.from_llm(
     chain_type="refine",
 )
 
-# question
-question = "What is the mission of Starlab?"
+# create retriever chain
+# qa_chain = SelfQueryRetriever.from_llm(
+#     llm=llm,
+#     vectorstore=vector_db,
+#     document_contents=document_content_description,
+#     metadata_field_info=metadata_field_info,
+#     verbose=True
+# )
 
+question= "Summarize recent happenings in Russia's invasion of Ukraine"
 
 def rag(question: str) -> str:
     # call QA chain

@@ -12,6 +12,9 @@ tiktoken = "*"
 sentence-transformers = "*"
 streamlit = "*"
 gpt4all = "*"
+bs4 = "*"
+nltk = "*"
+spacy = "*"
 
 [dev-packages]
 
