@@ -1,4 +1,5 @@
-from rag_function import rag
+#from rag_function import rag
+from RAG import rag
 import streamlit as st
 
 

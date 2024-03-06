@@ -19,16 +19,21 @@ metadata_field_info = [
         type="string",
     ),
     AttributeInfo(
-        name="time",
-        description="The Unix timestamp in milliseconds. Convert to date and time format to answer user queries.",
-        type="integer",
+        name="title",
+        description="The title of the news article. If no title was available, the string will just say \"no title provided\".",
+        type="string",
+    ),
+    AttributeInfo(
+        name="description",
+        description="A brief description of the news article. If no description was available, the string will just say \"no description provided\".",
+        type="string"
     )]
 document_content_description = "A news article about some journalistic topic."
 
 
 print("llm, chroma, embedding function ...")
 # create chat model
-llm = ChatOpenAI(openai_api_key="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", temperature=0)
+llm = ChatOpenAI(openai_api_key="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", temperature=0)
 
 embedding_function = SentenceTransformerEmbeddings(
     model_name="all-MiniLM-L6-v2"
@@ -41,16 +46,7 @@ vector_db = Chroma(
 
 
 
-print("prompt, memory, QA chain ...")
-# create prompt
-QA_prompt = PromptTemplate(
-    template="""Use the following news articles to answer the user question. If you don't know the answer, say so. Don't make up an answer.""
-chat_history: {chat_history}
-Context: {text}
-Question: {question}
-Answer:""",
-    input_variables=["text", "question", "chat_history"]
-)
+print("memory, QA chain ...")
 
 # create memory
 memory = ConversationBufferMemory(
@@ -60,20 +56,11 @@ qa_chain = ConversationalRetrievalChain.from_llm(
     llm=llm,
     memory=memory,
     retriever=vector_db.as_retriever(
-        search_kwargs={'fetch_k': 4, 'k': 3}, search_type='mmr'),
+        search_kwargs={'k': 10}, search_type='mmr'),
     chain_type="refine",
 )
 
-# create retriever chain
-# qa_chain = SelfQueryRetriever.from_llm(
-#     llm=llm,
-#     vectorstore=vector_db,
-#     document_contents=document_content_description,
-#     metadata_field_info=metadata_field_info,
-#     verbose=True
-# )
-
-question= "How did Alexei Navalny die?"
+question= "What has President Zelensky's policy lately been like?"
 
 def rag(question: str) -> str:
     # call QA chain
@@ -81,18 +68,5 @@ def rag(question: str) -> str:
 
     return response.get("answer")
 
-####SELF-QUERY RETRIEVER####
-retriever = SelfQueryRetriever.from_llm(
-    llm,
-    vector_db,
-    document_content_description,
-    metadata_field_info,
-)
-
-print(retriever.invoke("I want all the articles written by the New York Times."))
-
-# print("answering question:")
-# docs = vector_db.max_marginal_relevance_search(question, k=4)
-# for doc in docs:
-#     print(doc, "\n\n\n")
-# print(rag(question))
+print("answering question:")
+print(rag(question))

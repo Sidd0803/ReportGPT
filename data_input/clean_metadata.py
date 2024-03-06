@@ -22,21 +22,38 @@ items = res_dict["items"]
 for item in items:
     url = item["newsUrl"]
     urls.append(url)
+    #metadata = {}
 
-loader = WebBaseLoader([urls[0], urls[1], urls[2]])
+print("web loader")
+loader = WebBaseLoader(urls[30:70])
 docs = loader.load()
-print(docs[0].page_content)
-text_splitter = RecursiveCharacterTextSplitter(chunk_size=2000, chunk_overlap=200)
+text_splitter = RecursiveCharacterTextSplitter(chunk_size=10000, chunk_overlap=0)
 all_splits = text_splitter.split_documents(docs)
-print(all_splits[25].page_content , "/n/n/n/n")
+#all_splits = docs
+
+new_docs = []
+print("format snippets")
 for snippet in all_splits:
     text = snippet.page_content
     text = re.sub(r'\n', '', text)
     text = re.sub(r'\t', '', text)
     snippet.page_content = text
-#print(all_splits[25].page_content)
-new_docs = [{'page_content':snippet.page_content,'source':snippet.metadata['source'],'title':snippet.metadata['title'],'description':snippet.metadata['description']} for snippet in all_splits]
-#print([new_doc['page_content'] for new_doc in new_docs])
+    new_doc = {'page_content':snippet.page_content}
+    if 'source' in snippet.metadata:
+        new_doc['source'] = snippet.metadata['source']
+    else:
+        new_doc['source'] = "no source provided"
+    if 'description' in snippet.metadata:
+        new_doc['description'] = snippet.metadata['description']
+    else:
+        new_doc['description']= "no description provided"
+    if 'title' in snippet.metadata:
+         new_doc['title'] = snippet.metadata['title']
+    else:
+        new_doc['title']= "no title provided"
+    snippet.metadata = {'source': new_doc['source'], 'title': new_doc['title'], 'description': new_doc['description']}
+    new_docs.append(new_doc)
+# print([new_doc['page_content'] for new_doc in new_docs])
 json_string = json.dumps(new_docs)
 with open("../data/formatted_docsv2.json", "w") as json_file:
     json_file.write(json_string)
