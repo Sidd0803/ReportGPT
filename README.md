@@ -4,4 +4,4 @@ ReportGPT is a groundbreaking digital assistant designed specifically for the ev
 Our platform stands out by providing real-time, accurate data and past coverage analysis directly to journalists, editors, and media researchers, streamlining their workflow like never before. Whether it's for recollecting past articles, comparing coverage across different outlets, or preparing for an in-depth interview, ReportGPT ensures that all necessary information is just a few clicks away.
 
 
-![ReportGPT responding after scraping 1000 articles on the Ukraine-Russia War]([https://drive.google.com/uc?export=view&id=1quvDk5cokFucUv4DZlejTrgkKei2YkQk])
+![ReportGPT responding after scraping 1000 articles on the Ukraine-Russia War](https://drive.google.com/uc?export=view&id=1quvDk5cokFucUv4DZlejTrgkKei2YkQk)
