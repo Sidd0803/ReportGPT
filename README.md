@@ -1,6 +1,6 @@
 # ReportGPT
 
-ReportGPT is a groundbreaking digital assistant designed specifically for the evolving needs of journalists and media professionals. In today’s fast-paced news environment, quickly gathering accurate information and background is more crucial than ever. ReportGPT fills this gap by offering an innovative solution that combines Google's comprehensive search capabilities with ChatGPT's advanced language understanding.
+ReportGPT is a digital assistant designed specifically for the evolving needs of journalists and media professionals. In today’s fast-paced news environment, quickly gathering accurate information and background is more crucial than ever. ReportGPT fills this gap by offering a solution that combines Google's comprehensive search capabilities with ChatGPT's advanced language understanding.
 Our platform stands out by providing real-time, accurate data and past coverage analysis directly to journalists, editors, and media researchers, streamlining their workflow like never before. Whether it's for recollecting past articles, comparing coverage across different outlets, or preparing for an in-depth interview, ReportGPT ensures that all necessary information is just a few clicks away.
 
 
